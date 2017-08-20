@@ -5,9 +5,9 @@ env:
     - ANDROID_TARGET=android-22 ANDROID_ABI=x86
 android:
   components:
-    - build-tools-22.0.1
+    - build-tools-23.0.1
     - extra-android-support
-    - android-22
+    - android-23
     - extra-google-m2repository
     - extra-android-m2repository
 before_script:
