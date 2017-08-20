@@ -20,6 +20,7 @@
 android {
     lintOptions{
         enable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
+        abortOnError false
     }
     sourceSets {
         main {

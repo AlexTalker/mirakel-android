@@ -59,6 +59,7 @@ android {
     lintOptions {
         disable 'MissingTranslation','InvalidPackage','ImpliedQuantity','MissingQuantity'
         enable 'NewerVersionAvailable','RtlHardcoded','RtlCompat', 'RtlEnabled'
+        abortOnError false
     }
     def Properties localProps = new Properties()
     localProps.load(new FileInputStream(file('./local.properties')))
@@ -90,7 +91,8 @@ android {
             minifyEnabled false
             signingConfig signingConfigs.debug
             debuggable true
-            testCoverageEnabled = true
+            //testCoverageEnabled = true
+            testCoverageEnabled = false
         }
     }
     productFlavors {
@@ -131,12 +133,14 @@ android {
 }
 
 project.gradle.taskGraph.whenReady {
-   testFdroidDebugUnitTest {
-      ignoreFailures = gradle.getTaskGraph().hasTask(':new_ui:testFdroidDebugCoverage')
-   }
-   testGoogleDebugUnitTest {
-      ignoreFailures = gradle.getTaskGraph().hasTask(':new_ui:testGoogleDebugCoverage')
-   }
+   //testFdroidDebugUnitTest {
+   //   //ignoreFailures = gradle.getTaskGraph().hasTask(':new_ui:testFdroidDebugCoverage')
+   //   ignoreFailures = true
+   //}
+   //testGoogleDebugUnitTest {
+   //   //ignoreFailures = gradle.getTaskGraph().hasTask(':new_ui:testGoogleDebugCoverage')
+   //   ignoreFailures = true
+   //}
 }
 
 apply plugin: 'jacoco'

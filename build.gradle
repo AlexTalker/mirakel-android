@@ -3,20 +3,27 @@ import org.gradle.internal.os.OperatingSystem;
 buildscript {
     repositories {
       // That's because gradle is not able to use SNI – sorry for HTTP (That's why we verify the SHA1 keys ;))
-      maven { url "http://maven.azapps.de/artifactory/mirakel/" }
-      maven { url "https://plugins.gradle.org/m2/" }
+      //maven { url "http://maven.azapps.de/artifactory/mirakel/" }
+      //maven { url "https://plugins.gradle.org/m2/" }
+      maven {
+        url "https://plugins.gradle.org/m2/"
+      }
+      jcenter()
     }
       dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha2'
+        //classpath 'com.android.tools.build:gradle:2.0.0-alpha2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
-        classpath "org.sonarqube.gradle:gradle-sonarqube-plugin:1.0"
+        //classpath "org.sonarqube.gradle:sonarqube-gradle-plugin:2.5"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
         classpath files('build/build_deps/gradle-witness.jar')
         classpath "org.jacoco:org.jacoco.core:0.7.5.201505241946"
     }
 }
 dependencies {
       repositories {
-        maven { url "http://maven.azapps.de/artifactory/mirakel/" }
+        jcenter()
+        //maven { url "http://maven.azapps.de/artifactory/mirakel/" }
     }
 }
 
@@ -89,7 +96,8 @@ configure(allprojects) {
     ext.snackbarVersion = "2.10.6"
     ext.materialdesignVersion = "1.0"
     ext.acraVersion = "4.6.2"
-    ext.materialDialogsVersion = "0.8.5.0@aar"
+    ext.materialDialogsVersion = "0.8.5.9@aar"
+//    ext.materialDialogsVersion = "0.9.4.7@aar"
     ext.changelogVersion = "2.0.0"
     ext.undoBarVersion = "1.4@aar"
     ext.jacocoVersion = "0.7.5.201505241946"
@@ -100,7 +108,8 @@ apply plugin: 'org.sonarqube'
 
 subprojects {
   repositories {
-    maven { url "http://maven.azapps.de/artifactory/mirakel/" }
+    //maven { url "http://maven.azapps.de/artifactory/mirakel/" }
+    jcenter()
   }
   gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
@@ -145,6 +154,7 @@ subprojects {
     lintOptions{
         enable 'RtlHardcoded','RtlCompat', 'RtlEnabled','NewerVersionAvailable'
         disable 'InvalidPackage'
+        abortOnError false
     }
     defaultConfig {
       testApplicationId "de.azapps.mirakelandroid.test"
@@ -153,7 +163,8 @@ subprojects {
     }
     buildTypes {
       debug {
-        testCoverageEnabled = true
+        //testCoverageEnabled = true
+        testCoverageEnabled = false
       }
       release {
         testCoverageEnabled = false

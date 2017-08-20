@@ -23,6 +23,7 @@ android {
         enable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
         disable 'ImpliedQuantity'
         disable 'MissingQuantity'
+        abortOnError false
     }
     sourceSets {
         main {
