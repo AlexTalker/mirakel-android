@@ -149,8 +149,9 @@ public class TaskDeserializerTest extends MirakelDatabaseTestCase {
             final List<String> checkedElements = new ArrayList<>();
             for (final Entry<String, JsonElement> el : f.entrySet()) {
                 for (final Entry<String, JsonElement> el2 : s.entrySet()) {
-                    if (el.getKey().equals(el2.getKey())) {
-                        checkedElements.add(el.getKey());
+                    String key = el.getKey();
+                    if (key.equals(el2.getKey())) {
+                        checkedElements.add(key);
                         if (!equalJson(el.getValue(), el2.getValue())) {
                             fail("element " + el.toString()
                                  + " does not match " + el2.toString());
@@ -226,8 +227,10 @@ public class TaskDeserializerTest extends MirakelDatabaseTestCase {
 
     @Test
     public void testTaskJSON3() throws Exception {
+        // annotations.entry fields changes
+        // during serialization using time of last modification
         final String inputTask =
-            "{\"uuid\":\"5e9682e0-4e1a-491a-a7cb-8097c9ed790b\",\"status\":\"pending\",\"entry\":\"20140312T123933Z\",\"description\":\"Ban\",\"due\":\"20140501T000000Z\",\"project\":\"ni\", \"priority\":\"M\",\"modified\":\"20140502T130929Z\",\"tags\":[\"New_Tag\",\"bin\"],\"annotations\":[{\"entry\":\"20140529T113842Z\",\"description\":\"htoo\"}]}";
+            "{\"uuid\":\"5e9682e0-4e1a-491a-a7cb-8097c9ed790b\",\"status\":\"pending\",\"entry\":\"20140312T123933Z\",\"description\":\"Ban\",\"due\":\"20140501T000000Z\",\"project\":\"ni\", \"priority\":\"M\",\"modified\":\"20140502T130929Z\",\"tags\":[\"New_Tag\",\"bin\"],\"annotations\":[{\"entry\":\"20140502T130929Z\",\"description\":\"htoo\"}]}";
         testString("Tasks are not equal", inputTask);
     }
 

@@ -181,10 +181,10 @@ public class AccountDetailFragment extends GenericModelDetailFragment<AccountMir
                         final DialogInterface dialog,
                         final int which) {
                         int newValue = timePicker
-                                       .getCurrentHour()
+                                       .getHour()
                                        * 60
                                        + timePicker
-                                       .getCurrentMinute();
+                                       .getMinute();
                         if (newValue == 0) {
                             newValue = -1;
                         }

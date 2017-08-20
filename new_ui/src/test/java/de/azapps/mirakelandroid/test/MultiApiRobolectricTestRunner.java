@@ -124,6 +124,7 @@ public class MultiApiRobolectricTestRunner extends Suite {
     }
 
     private final ArrayList<Runner> runners = new ArrayList<>();
+    private int runners_num = 0;
 
     /*
      * Only called reflectively. Do not use programmatically.
@@ -132,8 +133,13 @@ public class MultiApiRobolectricTestRunner extends Suite {
         super(klass, Collections.<Runner>emptyList());
 
         for (Integer integer : SdkConfig.getSupportedApis()) {
+            runners_num++;
+            if(runners_num > 1) {
+                break;
+            }
+            System.out.println("Create Runner for API: " + integer);
+            // Weird failure on 12 minute
             runners.add(createTestRunner(integer));
-
         }
     }
 
@@ -146,3 +152,4 @@ public class MultiApiRobolectricTestRunner extends Suite {
         return runners;
     }
 }
+

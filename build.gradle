@@ -91,7 +91,7 @@ configure(allprojects) {
     ext.guavaVersion = "18.0"
     ext.butterknifeVersion = "6.1.0"
     ext.dashclockVersion = "2.0.0"
-    ext.robolectricVersion= "2.3"
+    ext.robolectricVersion= "3.0"
     ext.FAB_VERSION= "0.0.8"
     ext.snackbarVersion = "2.10.6"
     ext.materialdesignVersion = "1.0"
