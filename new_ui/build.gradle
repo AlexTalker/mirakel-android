@@ -119,8 +119,8 @@ android {
     }
     testOptions {
       unitTests.all {
-        //forkEvery = 100
-        forkEvery = 0
+        forkEvery = 100
+        //forkEvery = 0
         ignoreFailures = true
         // more forks will make the build unstable
         maxParallelForks 1
