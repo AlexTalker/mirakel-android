@@ -134,7 +134,7 @@ public class MultiApiRobolectricTestRunner extends Suite {
 
         for (Integer integer : SdkConfig.getSupportedApis()) {
             runners_num++;
-            if(runners_num > 1) {
+            if(runners_num > 3) {
                 break;
             }
             System.out.println("Create Runner for API: " + integer);
