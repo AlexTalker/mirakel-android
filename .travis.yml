@@ -1,8 +1,9 @@
 language: android
 jdk: oraclejdk8
 #dist: precise
-#env:
-#  matrix:
+env:
+  matrix:
+     - IGNORE_FAILURES=true
 #    - ANDROID_TARGET=android-23 ANDROID_ABI=x86
 android:
   components:
