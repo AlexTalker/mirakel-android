@@ -1,0 +1,77 @@
+def robolectricVersion = '3.2'
+
+def androidSdkVersions = [
+        '4.1.2_r1-robolectric-0',
+        '4.2.2_r1.2-robolectric-0',
+        '4.3_r2-robolectric-0',
+        '4.4_r1-robolectric-1',
+        '5.0.0_r2-robolectric-1',
+        '5.1.1_r9-robolectric-1',
+        '6.0.0_r1-robolectric-0',
+        '6.0.1_r3-robolectric-0',
+        '7.0.0_r1-robolectric-0',
+        '7.1.0_r7-robolectric-0',
+]
+
+def shadowArtifacts = [
+        "org.robolectric:shadows-core:${robolectricVersion}",
+        "org.robolectric:shadows-httpclient:${robolectricVersion}",
+        "org.robolectric:shadows-maps:${robolectricVersion}",
+        "org.robolectric:shadows-multidex:${robolectricVersion}",
+        "org.robolectric:shadows-play-services:${robolectricVersion}",
+        "org.robolectric:shadows-support-v4:${robolectricVersion}",
+]
+
+apply plugin: 'java'
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+configurations {
+    sandbox
+}
+
+def allSdkConfigurations = []
+
+androidSdkVersions.forEach { version ->
+    allSdkConfigurations << configurations.create(version)
+    dependencies.add(version, "org.robolectric:android-all:${version}")
+    dependencies.add('sandbox', "org.robolectric:android-all:${version}")
+}
+
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    compile("org.robolectric:robolectric:${robolectricVersion}") {
+        // we don't need these MavenDependencyResolver in a hermetic build
+        exclude group: 'org.apache.maven', module: 'maven-ant-tasks'
+        exclude group: 'org.apache.ant', module: 'ant'
+    }
+
+    shadowArtifacts.forEach { shadowArtifact ->
+        compile shadowArtifact
+        sandbox shadowArtifact
+    }
+}
+
+
+task createRobolectricDeps {
+}
+
+task copyLibs(type: Copy) {
+    into "$buildDir/output/libs"
+    from configurations.compile
+}
+
+task copySdks(type: Copy) {
+    into "$buildDir/output/libs"
+    from allSdkConfigurations
+}
+
+task filesForHermeticBuild {
+    dependsOn createRobolectricDeps
+    dependsOn copyLibs
+    dependsOn copySdks
+}

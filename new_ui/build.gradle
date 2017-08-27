@@ -128,6 +128,18 @@ android {
     }
     testOptions {
       unitTests.all {
+        // Separate dependency downloading from test running process
+        // and make it easier to limit number of SDKs for current run
+        def offline = System.getenv('ROBOLECTRIC_OFFLINE');
+        def sdks    = System.getenv('ROBOLECTRIC_SDKS');
+        if (offline != null && offline.length() > 0) {
+            systemProperty 'robolectric.dependency.dir', "$projectDir/../hermetic/build/output/libs"
+            systemProperty 'robolectric.offline', true
+        }
+        if (sdks != null && sdks.length() > 0) {
+            systemProperty 'robolectric.enabledSdks', sdks
+        }
+
         forkEvery = 100
         ignoreFailures = ignore_failures() == null ? false : ignore_failures()
         // more forks will make the build unstable
@@ -149,16 +161,39 @@ android {
         include '**/*Test.class'
 
         afterTest { description, result ->
-            //for (Throwable e: result.getExceptions()) {
-            //    e.printStackTrace();
-            //}
+            for (Throwable e: result.getExceptions()) {
+                e.printStackTrace();
+            }
         }
       }
   }
 }
 
+configurations {
+    sandbox
+}
+
+def allSdkConfigurations = []
+
 project.gradle.taskGraph.whenReady {
    testFdroidDebugUnitTest {
+   def androidSdkVersions = [
+        '4.1.2_r1-robolectric-0',
+        '4.2.2_r1.2-robolectric-0',
+        '4.3_r2-robolectric-0',
+        '4.4_r1-robolectric-1',
+        '5.0.0_r2-robolectric-1',
+        '5.1.1_r9-robolectric-1',
+        '6.0.0_r1-robolectric-0',
+        '6.0.1_r3-robolectric-0',
+        '7.0.0_r1-robolectric-0',
+        '7.1.0_r7-robolectric-0',
+]
+androidSdkVersions.forEach { version ->
+    allSdkConfigurations << configurations.create(version)
+    dependencies.add(version, "org.robolectric:android-all:${version}");
+    dependencies.add('sandbox', "org.robolectric:android-all:${version}");
+}
       ignoreFailures = ignore_failures() == null
         ? gradle.getTaskGraph().hasTask(':new_ui:testFdroidDebugCoverage')
         : ignore_failures()
@@ -274,6 +309,8 @@ dependencies {
     //for tests
     testCompile "junit:junit:4.11"
     testCompile "org.robolectric:robolectric:3.2"
+    //testCompile files('../libs/')
+    testCompile fileTree(dir: '../libs', include: '*.jar')
     testCompile 'com.google.truth:truth:0.27'
 
     googleCompile 'com.google.android.gms:play-services-analytics:7.5.0'

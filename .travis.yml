@@ -3,7 +3,7 @@ jdk: oraclejdk8
 #dist: precise
 env:
   matrix:
-     - IGNORE_FAILURES=true
+     - IGNORE_FAILURES=true ROBOLECTRIC_OFFLINE=true
 #    - ANDROID_TARGET=android-23 ANDROID_ABI=x86
 android:
   components:
@@ -28,5 +28,8 @@ before_script:
     - cp new_ui/debug.keystore dashclock/debug.keystore
 script:
 #  - gradle build -x test
-  - gradle --stacktrace --continue clean testFdroidDebugUnitTest
+  - pwd
+  - cd hermetic && gradle filesForHermeticBuild
+  - cd ..
+  - ROBOLECTRIC_SDKS=23 gradle --stacktrace --continue clean testFdroidDebugUnitTest
 #    - bash build/test.sh  
