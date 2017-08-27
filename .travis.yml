@@ -28,8 +28,8 @@ before_script:
     - cp new_ui/debug.keystore dashclock/debug.keystore
 script:
 #  - gradle build -x test
-  - pwd
   - cd hermetic && gradle filesForHermeticBuild
   - cd ..
-  - ROBOLECTRIC_SDKS=23 gradle --stacktrace --continue clean testFdroidDebugUnitTest
+  - gradle clean
+  - bash build/travis.sh
 #    - bash build/test.sh  
